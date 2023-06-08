@@ -72,37 +72,13 @@ import { Form } from "./Form/Form";
 // }
 
 export const App = () => {
-//хуки 
-const [contacts, setContacts] = useState([]);
-const [filter, setFilter] = useState("");
-//
-
-//функції 
-const handleSubmitForm = (name, number) => {
-  const isDuplicateName = contacts.some(
-    (contact) => contact.name.toLowerCase() === name.toLowerCase()
-  );
-
-  if (isDuplicateName) {
-    alert("Контакт з таким ім'ям вже існує!");
-    return;
-  }
-
-  const newContact = { id: Date.now(), name, number };
-
-  setContacts = ((prevState) => [...prevState, newContact]);
-};
-
-  const handleDelete = (id) => {
-    setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
-  };
-  
-  const changeFilter = (e) => {
-    setFilter( e.currentTarget.value )
-  };
+  //хуки 
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState("");
+  //
 
   useEffect(() => {
-    localStorage.setItem('contact' , JSON.stringify(this.state.contacts))
+    localStorage.setItem('contact' , JSON.stringify(contacts))
   } , [contacts])
 
   useEffect(() => {
@@ -112,20 +88,44 @@ const handleSubmitForm = (name, number) => {
     setContacts({contacts: parsedContacts});
   }, [setContacts])
 
-  const filterContacts = contacts.filter((contact) =>
-  contact.name.toLowerCase().includes(filter.toLowerCase())
-);
+  
+  //функції 
+  const handleSubmitForm = (name, number) => {
+    const isDuplicateName = contacts.some(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
+    );
+  
+    if (isDuplicateName) {
+      alert("Контакт з таким ім'ям вже існує!");
+      return;
+    }
+  
+    const newContact = { id: Date.now(), name, number };
+  
+    setContacts(prevState => [...prevState, newContact]);
+  };
+  
+    const handleDelete = (id) => {
+      setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
+    };
+    
+    const changeFilter = (e) => {
+      setFilter( e.currentTarget.value )
+    };
 
-return (
-  <div className={css.container}>
-        <Form handleSubmitForm={handleSubmitForm} />
-
-        <Filter value={filter} onChange={changeFilter} />
-
-        <ContactList
-          filterContacts={filterContacts}
-          handleDelete={handleDelete}
-        />
-  </div>
-);
-};
+    const filterContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase()));
+  
+  return (
+    <div className={css.container}>
+          <Form handleSubmitForm={handleSubmitForm} />
+  
+          <Filter value={filter} onChange={changeFilter} />
+  
+          <ContactList
+            filterContacts={filterContacts}
+            handleDelete={handleDelete}
+          />
+    </div>
+  );
+  }; 
