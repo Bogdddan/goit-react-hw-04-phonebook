@@ -64,7 +64,7 @@ import css from "./Form.module.css";
 
 
 
-export const Form = () => {
+export const Form = ({ handleSubmitForm }) => {
 // хуки useState
 const [name , setName] = useState('');
 const [number , setNumber] = useState('');
@@ -87,22 +87,18 @@ const {name , value} = event.target
   }
 };
 
-const handleSubmitForm = (e) => {
-    e.preventDefault();
 
-    const { name, number } = this.state;
+const onSubmitForm = event => {
+  event.preventDefault();
 
-    this.props.handleSubmitForm(name, number);
-
-    this.setState({
-      name: "",
-      number: "",
-    });
-  };
+  handleSubmitForm(name , number);
+  setName('');
+  setNumber('');
+};
 
 //яка розмітка повертається
   return (
-    <form className={css.form} onSubmit={handleSubmitForm}>
+    <form className={css.form} onSubmit={onSubmitForm}>
       <p>Name</p>
       <div className={css.qwerty}>
         <input
