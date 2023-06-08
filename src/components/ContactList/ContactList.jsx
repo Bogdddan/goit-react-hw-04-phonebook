@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ContactList = ({ filterContacts, handleDelete }) => {
+export const ContactList = ({ filterContacts, handleDelete }) => {
     return (
     <div>
         <ul>
@@ -17,5 +17,3 @@ const ContactList = ({ filterContacts, handleDelete }) => {
     );
 };
 
-
-export default ContactList;
