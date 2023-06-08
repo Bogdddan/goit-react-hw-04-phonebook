@@ -94,13 +94,11 @@ const handleSubmitForm = (name, number) => {
 };
 
   const handleDelete = (id) => {
-    setContacts((prevState) => ({
-      contacts: prevState.contacts.filter((contact) => contact.id !== id),
-    }));
+    setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
   };
   
   const changeFilter = (e) => {
-    setFilter({ filter: e.currentTarget.value })
+    setFilter( e.currentTarget.value )
   };
 
   useEffect(() => {
@@ -108,11 +106,11 @@ const handleSubmitForm = (name, number) => {
   } , [contacts])
 
   useEffect(() => {
-    const contact = localStorage.getItem('contact')
+    const contact = localStorage.getItem('contact');
     const parsedContacts = JSON.parse(contact)
 
     setContacts({contacts: parsedContacts});
-  }, [])
+  }, [setContacts])
 
   const filterContacts = contacts.filter((contact) =>
   contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -130,4 +128,4 @@ return (
         />
   </div>
 );
-}
+};
