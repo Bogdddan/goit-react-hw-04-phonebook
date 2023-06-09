@@ -4,7 +4,76 @@ import { Filter } from "./Filter/Filter";
 import { ContactList } from "./ContactList/ContactList";
 import { Form } from "./Form/Form";
 
-// export class App extends Component {
+export const App = () => {
+  //хуки 
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState("");
+  //
+
+  useEffect(() => {
+    localStorage.setItem('contact' , JSON.stringify(contacts))
+  } , [contacts])
+
+  useEffect(() => {
+    const contact = localStorage.getItem('contact');
+    const parsedContacts = JSON.parse(contact)
+
+    setContacts( parsedContacts );
+  }, [setContacts])
+
+  
+  //функції 
+  const handleSubmitForm = (name, number) => {
+    const isDuplicateName = contacts.some(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
+    );
+  
+    if (isDuplicateName) {
+      alert("Контакт з таким ім'ям вже існує!");
+      return;
+    }
+  
+    const newContact = { id: Date.now(), name, number };
+  
+    setContacts(prevState => [...prevState, newContact]);
+  };
+  
+    const handleDelete = (id) => {
+      setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
+    };
+    
+    const changeFilter = (e) => {
+      setFilter( e.currentTarget.value )
+    };
+
+  const filterContacts = () => {
+    return contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase()));
+  }
+  
+  return (
+    <div className={css.container}>
+          <Form 
+            handleSubmitForm={handleSubmitForm} 
+          />
+          <Filter 
+            value={filter} 
+            onChange={changeFilter} 
+          />
+          <ContactList
+            filterContacts={filterContacts()}
+            handleDelete={handleDelete}
+          />
+    </div>
+  );
+  }; 
+
+
+
+
+  // const filterContacts = contacts.filter(contact =>
+  //   contact.name.toLowerCase().includes(filter.toLowerCase()));
+  // export class App extends Component {
   // state = {
   //   contacts: [],
   //   filter: "",
@@ -70,62 +139,3 @@ import { Form } from "./Form/Form";
   //   );
 //   }
 // }
-
-export const App = () => {
-  //хуки 
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState("");
-  //
-
-  useEffect(() => {
-    localStorage.setItem('contact' , JSON.stringify(contacts))
-  } , [contacts])
-
-  useEffect(() => {
-    const contact = localStorage.getItem('contact');
-    const parsedContacts = JSON.parse(contact)
-
-    setContacts({contacts: parsedContacts});
-  }, [setContacts])
-
-  
-  //функції 
-  const handleSubmitForm = (name, number) => {
-    const isDuplicateName = contacts.some(
-      (contact) => contact.name.toLowerCase() === name.toLowerCase()
-    );
-  
-    if (isDuplicateName) {
-      alert("Контакт з таким ім'ям вже існує!");
-      return;
-    }
-  
-    const newContact = { id: Date.now(), name, number };
-  
-    setContacts(prevState => [...prevState, newContact]);
-  };
-  
-    const handleDelete = (id) => {
-      setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
-    };
-    
-    const changeFilter = (e) => {
-      setFilter( e.currentTarget.value )
-    };
-
-    const filterContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase()));
-  
-  return (
-    <div className={css.container}>
-          <Form handleSubmitForm={handleSubmitForm} />
-  
-          <Filter value={filter} onChange={changeFilter} />
-  
-          <ContactList
-            filterContacts={filterContacts}
-            handleDelete={handleDelete}
-          />
-    </div>
-  );
-  }; 

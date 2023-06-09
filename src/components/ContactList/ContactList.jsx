@@ -2,7 +2,6 @@ import React from 'react';
 
 export const ContactList = ({ filterContacts, handleDelete }) => {
     return (
-    <div>
         <ul>
         {filterContacts.map(contact => (
             <li key={contact.id}>
@@ -13,7 +12,5 @@ export const ContactList = ({ filterContacts, handleDelete }) => {
             </li>
         ))}
         </ul>
-    </div>
     );
 };
-
