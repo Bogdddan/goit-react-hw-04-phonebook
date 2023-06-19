@@ -5,22 +5,23 @@ import { ContactList } from "./ContactList/ContactList";
 import { Form } from "./Form/Form";
 
 export const App = () => {
-  //хуки 
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState("");
-  //
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem('contact' , JSON.stringify(contacts))
-  } , [contacts])
+    const contact = localStorage.getItem("contact");
+    const parsedContacts = JSON.parse(contact);
+
+    setContacts(parsedContacts);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    const contact = localStorage.getItem('contact');
-    const parsedContacts = JSON.parse(contact)
-
-    setContacts( parsedContacts );
-  }, [setContacts])
-
+    if (!loading) {
+      localStorage.setItem("contact", JSON.stringify(contacts));
+    }
+  }, [contacts, loading]);
   
   //функції 
   const handleSubmitForm = (name, number) => {
@@ -49,6 +50,10 @@ export const App = () => {
   const filterContacts = () => {
     return contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase()));
+  }
+
+  if(loading){
+    return <div>Loading...</div>
   }
   
   return (
